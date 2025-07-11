@@ -9,8 +9,8 @@ Este repositorio contiene dos proyectos dentro de un **monorepo**:
 
 * **Git** Rara clonar y subir el proyecto
 * **Node.js**
-* * **PHP** 7.4
-* * **MySQL**
+* **PHP** 7.4
+* **MySQL**
 * **Npm** Para instalar las dependencias del frontend
 * **Composer** Para instalar las dependencias del backend
 
