@@ -32,6 +32,10 @@ window.axios = Axios.create({
 });
 ```
 
+Nota extra:
+
+El flag `--openssl-legacy-provider` dentro del script `serve` solo es necesario desde Node.js v17 en adelante.
+
 ## 💽 Levantar el backend
 
 1. Crea la base de datos y renombra `.env.example` a `.env`.
