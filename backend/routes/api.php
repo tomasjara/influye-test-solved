@@ -1,6 +1,5 @@
 <?php
 
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -15,3 +14,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/items', 'ItemsController@getItems');
+Route::put('/item', 'ItemsController@createItem');
+Route::delete('/item/{id}', 'ItemsController@deleteItem');
+Route::put('/item/{id_item}/stock', 'ItemsController@addStock');
+Route::get('/transactions/{id_item}', 'ItemsController@getTransactions');

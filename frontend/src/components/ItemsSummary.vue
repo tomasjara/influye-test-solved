@@ -1,16 +1,38 @@
 <template>
-<div style="margin-top: 40px">
-    <div>Total Items: X</div>
-    <div class="red">Items con bajo stock: X</div>
-</div>
+    <div style="margin-top: 40px">
+        <div>Total Items: {{itemsTotal}}</div>
+        <div class="red">Items con bajo stock: {{itemsWarning}}</div>
+    </div>
 </template>
 
 <script>
 export default {
-
+    props: {
+        items: {
+            type: Array,
+            default: () => []
+        },
+        onWarning: {
+            type: Function,
+            default: () => {}
+        }
+    },
+    computed: {
+        itemsTotal() {
+            return this.items.length;
+        },
+        itemsWarning() {
+            return this.items.filter(item => item.quantity < 0).length;
+        }
+    },
+    watch: {
+        itemsWarning(newValue) {
+            if (newValue > 0) {
+                this.onWarning(newValue);
+            }
+        }
+    }
 }
 </script>
 
-<style>
-
-</style>
+<style></style>
