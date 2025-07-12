@@ -1,9 +1,13 @@
 <template>
 	<div id="app">
 
-		<div class="flex" style="margin-bottom: 40px">
-			<button @click="modalCreateItem = true">Crear Item</button>
+		<h1>Inventario de Items</h1>
+
+		<div class="flex">
+			<button @click="openModalCreateItem()">Crear Item</button>
 		</div>
+
+		<items-summary :items="items" :onWarning="Warning"></items-summary>
 
 		<div v-for="item in items" :key="item.id"
 			:class="{ 'card selectable mb10 flex': true, 'red': item.quantity < 0 }" @click="modalOptions = item">
@@ -16,26 +20,29 @@
 			</template>
 		</div>
 
-		<items-summary :items="items" :onWarning="Warning"></items-summary>
 
 		<modal v-model="modalOptions">
 			<div class="flex column" v-if="modalOptions">
-				<button @click="modalAddOrRemoveItemStock = true" class="mb10">Agregar o quitar {{ modalOptions.title
-				}}</button>
-				<button @click="openItemDetails(modalOptions.id)" class="mb10">Ver transacciones de {{
-					modalOptions.title
-				}}</button>
-				<button @click="deleteItem">Eliminar item {{ modalOptions.title }}</button>
+				<h2>{{ modalOptions.title }}</h2>
+				<button @click="openModalAddStock()" class="mb10">Agregar o quitar stock</button>
+				<button @click="openItemDetails(modalOptions.id)" class="mb10">Ver transacciones</button>
+				<button class="button-red" @click="deleteItem">Eliminar item</button>
 			</div>
 		</modal>
 
 		<item-details ref="itemDetails" :item="modalOptions"></item-details>
 
 		<modal v-model="modalAddOrRemoveItemStock">
-			<div class="flex column" v-if="modalOptions">
-				<h1 class="mb10">Agregar o quitar stock</h1>
-				<input v-model="modalOptions.title" type="text" placeholder="Nombre del item" class="mb10" disabled>
-				<input v-model="addStockValue" type="number" placeholder="Cantidad" class="mb10">
+			<div class="flex column " style="gap: 10px;" v-if="modalOptions">
+				<h2 class="mb10">Agregar o quitar stock</h2>
+				<div style="display: flex; gap: 10px;" >
+					<input v-model="modalOptions.title" type="text" placeholder="Nombre del item" class="mb10" disabled>
+					<div style="display: flex; gap: 10px; margin-bottom: 10px; justify-items: center;">
+						<button  @click="addStockValue -= 1">-</button>
+						<input ref="addStockInput" v-model.number="addStockValue" type="number" placeholder="Cantidad" class="">
+						<button  @click="addStockValue += 1">+</button>
+					</div>
+				</div>
 				<button @click="addStock" class="mb10">Actualizar</button>
 			</div>
 		</modal>
@@ -43,7 +50,8 @@
 		<modal v-model="modalCreateItem">
 			<div class="flex column">
 				<h1 class="mb10">Crear Item</h1>
-				<input v-model="newItem.title" type="text" placeholder="Nombre del item" class="mb10">
+				<input ref="newItemTitleInput" v-model="newItem.title" type="text" placeholder="Nombre del item"
+					class="mb10">
 				<input v-model="newItem.unit" type="text" placeholder="Unidad de medida" class="mb10">
 				<button @click="createNewItem" class="mb10">Crear</button>
 			</div>
@@ -92,6 +100,18 @@ export default {
 				this.items = res.data;
 			}).catch(err => {
 				console.log('Error message GET all items: ', err);
+			});
+		},
+		openModalCreateItem() {
+			this.modalCreateItem = true;
+			this.$nextTick(() => {
+				this.$refs.newItemTitleInput.focus();
+			});
+		},
+		openModalAddStock() {
+			this.modalAddOrRemoveItemStock = true
+			this.$nextTick(() => {
+				this.$refs.addStockInput.focus();
 			});
 		},
 		createNewItem() {
@@ -172,10 +192,54 @@ body {
 	background-color: #f7f8f9;
 }
 
+h1 {
+	text-align: center;
+}
+
+h2 {
+	text-align: center;
+	margin: 0;
+	margin-bottom: 13px;
+	font-size: 1.5rem;
+}
+
+button {
+	padding: 8px 16px;
+	border-radius: 6px;
+	border: 1px solid #e2e8f0;
+	cursor: pointer;
+	background-color: #0f172a;
+	color: white;
+	transition: background-color 0.3s ease;
+	text-align: center;
+
+	&:hover {
+		background-color: #2e2e2e;
+	}
+}
+
+.button-red {
+	background-color: #dc2626;
+
+	&:hover {
+		background-color: #df4848;
+	}
+}
+
+input {
+	border: 1px solid #ccc;
+	border-radius: 5px;
+	padding: 10px;
+	width: 100%;
+	box-sizing: border-box;
+}
+
 #app {
 	font-family: Avenir, Helvetica, Arial, sans-serif;
 	color: #2c3e50;
 	padding: 20px;
+	max-width: 500px;
+	margin: 0 auto;
 }
 
 .flex {
@@ -215,6 +279,7 @@ body {
 }
 
 .card.selectable:hover {
-	outline: 2px solid #2c3e50;
+	outline: 1px solid #2c3e5081;
+	transform: scale(1.01);
 }
 </style>

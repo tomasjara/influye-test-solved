@@ -1,5 +1,5 @@
 <template>
-    <div style="margin-top: 40px">
+    <div style="padding: 15px 0 30px 0; display:flex; gap:10px; justify-content: space-between; align-items: center;">
         <div>Total Items: {{itemsTotal}}</div>
         <div class="red">Items con bajo stock: {{itemsWarning}}</div>
     </div>

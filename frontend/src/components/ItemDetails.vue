@@ -1,15 +1,12 @@
 <template>
-
-    <modal v-model="modal">
-        <p v-if="item">{{ item.title }}</p>
+    <modal v-model="modal"
+        style="display: flex; flex-direction: row; padding: 20px; justify-content: center; align-items: center;">
+        <p v-if="item" style="font-size: 1.5rem; text-align: center;">{{ item.title }}</p>
         <h1>Historial de transacciones</h1>
-        <p v-if="list && list.length === 0">Este ítem aún no registra transacciones</p>
-        <div v-for="item in list" :key="item.id">
-            <div class="card mb10">
-                <p style="margin-bottom: 10px;">{{ item.quantity }} {{ item.quantity > 0 ? 'agregados' : 'descontados' }}
-                </p>
-                <p>de {{ item.details.from }} a {{ item.details.to }}</p>
-            </div>
+        <p style="text-align: center;" v-if="list && list.length === 0">Este ítem aún no registra transacciones</p>
+        <div v-for="item in list" :key="item.id" class="item-transaction mb10" >
+            <p >{{ item.quantity }} {{ item.quantity > 0 ? 'agregados' : 'descontados' }} (de {{ item.details.from }} a {{ item.details.to }})
+            </p>
         </div>
     </modal>
 
@@ -41,7 +38,8 @@ export default {
             this.list = axios.get('transactions/' + id_item)
                 .then(res => {
                     console.log(res.data);
-                    this.list = res.data;
+                    const sortedData = res.data.sort((a, b) => new Date(a.created_at) - new Date(b.created_at));
+                    this.list = sortedData;
                 })
                 .catch(err => {
                     console.log('Error message GET item details: ', err);
@@ -55,6 +53,7 @@ export default {
 p {
     margin: 0;
     padding: 0;
+    width: 100%;
 }
 
 h1 {
@@ -63,6 +62,14 @@ h1 {
     margin-bottom: 13px;
     margin-top: 8px;
     font-size: 1.5em;
+}
+
+.item-transaction {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+    margin: 0 20px;
 }
 
 .card {
