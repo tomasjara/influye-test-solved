@@ -19,7 +19,6 @@ Este repositorio contiene dos proyectos dentro de un **monorepo**:
 Desde la carpeta `frontend/`, ejecuta:
    
 ```bash
-cd frontend
 npm install
 npm run serve
 ```
