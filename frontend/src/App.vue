@@ -35,14 +35,16 @@
 		<modal v-model="modalAddOrRemoveItemStock">
 			<div class="flex column " style="gap: 10px;" v-if="modalOptions">
 				<h2 class="mb10">Agregar o quitar stock</h2>
-				<div style="display: flex; gap: 10px;" >
+				<div style="display: flex; gap: 10px;">
 					<input v-model="modalOptions.title" type="text" placeholder="Nombre del item" class="mb10" disabled>
 					<div style="display: flex; gap: 10px; margin-bottom: 10px; justify-items: center;">
-						<button  @click="addStockValue -= 1">-</button>
-						<input ref="addStockInput" v-model.number="addStockValue" type="number" placeholder="Cantidad" class="">
-						<button  @click="addStockValue += 1">+</button>
+						<button @click="addStockValue -= 1">-</button>
+						<input ref="addStockInput" v-model.number="addStockValue" type="number" placeholder="Cantidad"
+							class="">
+						<button @click="addStockValue += 1">+</button>
 					</div>
 				</div>
+				<p v-if="addStockValueError" class="error">{{ addStockValueError }}</p>
 				<button @click="addStock" class="mb10">Actualizar</button>
 			</div>
 		</modal>
@@ -53,6 +55,7 @@
 				<input ref="newItemTitleInput" v-model="newItem.title" type="text" placeholder="Nombre del item"
 					class="mb10">
 				<input v-model="newItem.unit" type="text" placeholder="Unidad de medida" class="mb10">
+				<p v-if="newItemError" class="error">{{ newItemError }}</p>
 				<button @click="createNewItem" class="mb10">Crear</button>
 			</div>
 		</modal>
@@ -84,7 +87,9 @@ export default {
 			newItem: {
 				title: '',
 				unit: ''
-			}
+			},
+			newItemError: '',
+			addStockValueError: ''
 		}
 	},
 	mounted() {
@@ -96,34 +101,40 @@ export default {
 		},
 		getAllItems() {
 			axios.get('items').then(res => {
-				console.log(res.data);
+				// console.log(res.data);
 				this.items = res.data;
 			}).catch(err => {
 				console.log('Error message GET all items: ', err);
 			});
 		},
 		openModalCreateItem() {
+			this.newItemError = '';
 			this.modalCreateItem = true;
 			this.$nextTick(() => {
 				this.$refs.newItemTitleInput.focus();
 			});
 		},
 		openModalAddStock() {
+			this.addStockValueError = '';
 			this.modalAddOrRemoveItemStock = true
 			this.$nextTick(() => {
 				this.$refs.addStockInput.focus();
 			});
 		},
 		createNewItem() {
-			console.log({ title: this.newItem.title, unit: this.newItem.unit });
+			if ((!this.newItem.title || this.newItem.title.trim() === '') &&
+				(!this.newItem.unit || this.newItem.unit.trim() === '')) {
+				this.newItemError = 'Los dos campos son obligatorios.';
+				return;
+			}
 
 			if (!this.newItem.title || this.newItem.title.trim() === '') {
-				alert('El título es obligatorio.');
+				this.newItemError = 'El título es obligatorio.';
 				return;
 			}
 
 			if (!this.newItem.unit || this.newItem.unit.trim() === '') {
-				alert('La unidad es obligatoria.');
+				this.newItemError = 'La unidad es obligatoria.';
 				return;
 			}
 
@@ -131,18 +142,20 @@ export default {
 				title: this.newItem.title,
 				unit: this.newItem.unit
 			}).then(res => {
-				console.log(res.data);
+				// console.log(res.data);
+				this.newItemError = '';
 				this.modalCreateItem = false;
 				this.items = res.data;
 				this.newItem = { title: '', unit: '' };
 				this.getAllItems()
 			}).catch(err => {
+				this.newItemError = '';
 				console.log('Error message create new item: ', err);
 			});
 		},
 		deleteItem() {
 			axios.delete(`item/${this.modalOptions.id}`).then(res => {
-				console.log(res.data);
+				// console.log(res.data);
 				this.modalOptions = null;
 				this.getAllItems();
 			}).catch(err => {
@@ -151,13 +164,10 @@ export default {
 		},
 		addStock() {
 			if (!this.addStockValue || isNaN(this.addStockValue) || Number(this.addStockValue) === 0) {
-				alert('La cantidad debe ser un número distinto de cero.');
+				this.addStockValueError = 'La cantidad debe ser un número distinto de cero.';
 				return;
 			}
-			if (this.addStockValue == 0) {
-				return;
-			}
-
+			this.addStockValueError = '';
 			const transactions = {
 				id_item: this.modalOptions.id,
 				quantity: Number(this.addStockValue),
@@ -166,11 +176,10 @@ export default {
 					to: Number(this.modalOptions.quantity) + Number(this.addStockValue)
 				}
 			}
-			console.log(transactions);
 			axios.put(`item/${this.modalOptions.id}/stock`, {
 				transactions: transactions
 			}).then(res => {
-				console.log(res.data);
+				// console.log(res.data);
 				this.modalAddOrRemoveItemStock = false;
 				this.modalOptions = null;
 				this.addStockValue = 0;
@@ -194,6 +203,12 @@ body {
 
 h1 {
 	text-align: center;
+}
+
+.error {
+	color: red;
+	font-size: 0.9rem;
+	margin-top: 5px;
 }
 
 h2 {
