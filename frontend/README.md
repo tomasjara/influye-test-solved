@@ -1,19 +1,28 @@
-# frontend
+# Frontend influye test
 
-## Project setup
-```
+## 💻 Levantar el frontend
+
+Desde la carpeta `frontend/`, ejecuta:
+   
+```bash
 npm install
-```
-
-### Compiles and hot-reloads for development
-```
 npm run serve
 ```
 
-### Compiles and minifies for production
-```
-npm run build
+La configuración para conectar con el backend está en `Main.js`:
+
+```js
+window.axios = Axios.create({
+  baseURL: 'http://localhost:8000/api'
+});
 ```
 
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+Ejecutar test unitarios
+
+```bash
+npm run test:unit
+```
+
+Nota extra:
+
+El flag `--openssl-legacy-provider` dentro del script `serve` solo es necesario desde Node.js v17 en adelante.
