@@ -8,7 +8,6 @@ class ItemsTransaction extends Model
 {
     protected $table = 'items_transaction';
     protected $primaryKey = 'id';
-    public $timestamps = false;
     protected $casts = ['details' => 'array'];
     protected $fillable = ['item_id', 'quantity', 'details'];
 }

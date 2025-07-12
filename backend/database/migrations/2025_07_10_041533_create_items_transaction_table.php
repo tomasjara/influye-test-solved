@@ -18,6 +18,7 @@ class CreateItemsTransactionTable extends Migration
             $table->unsignedInteger('item_id');
             $table->float('quantity');
             $table->string('details');
+            $table->timestamps();
         });
     }
 
