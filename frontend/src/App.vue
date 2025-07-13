@@ -96,7 +96,7 @@ export default {
 		axios.get('items').then(res => {
 			this.items = res.data;
 		}).catch(err => {
-			console.log('Error message GET all items: ', err);
+			// console.log('Error message GET all items: ', err);
 		});
 	},
 	methods: {
@@ -133,7 +133,7 @@ export default {
 				this.newItem = { title: '', unit: '' };
 			}).catch(err => {
 				this.newItemError = '';
-				console.log('Error message create new item: ', err);
+				// console.log('Error message create new item: ', err);
 			});
 		},
 		deleteItem() {
@@ -141,7 +141,7 @@ export default {
 				this.modalOptions = null;
 				this.items = res.data;
 			}).catch(err => {
-				console.log('Error message delete item: ', err);
+				// console.log('Error message delete item: ', err);
 			});
 		},
 		addStock() {

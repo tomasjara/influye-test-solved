@@ -37,12 +37,12 @@ export default {
             this.modal = true;
             this.list = axios.get('transactions/' + id_item)
                 .then(res => {
-                    console.log(res.data);
+                    // console.log(res.data);
                     const sortedData = res.data.sort((a, b) => new Date(a.created_at) - new Date(b.created_at));
                     this.list = sortedData;
                 })
                 .catch(err => {
-                    console.log('Error message GET item details: ', err);
+                    // console.log('Error message GET item details: ', err);
                 });
         }
     }

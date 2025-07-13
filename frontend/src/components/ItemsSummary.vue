@@ -23,7 +23,7 @@ export default {
         },
         itemsWarning() {
             if (!Array.isArray(this.items)) return
-            console.log('items: ', this.items);
+            // console.log('items: ', this.items);
             return this.items.filter(item => Number(item.quantity) < 0).length
         }
     },
