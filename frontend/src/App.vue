@@ -7,7 +7,7 @@
 			<button @click="openModalCreateItem()">Crear Item</button>
 		</div>
 
-		<items-summary :items="items" :onWarning="Warning"></items-summary>
+		<items-summary :items="items" @onWarning="Warning"></items-summary>
 
 		<div v-for="item in items" :key="item.id"
 			:class="{ 'card selectable mb10 flex': true, 'red': item.quantity < 0 }" @click="modalOptions = item">

@@ -30,7 +30,7 @@ export default {
     watch: {
         itemsWarning(newValue) {
             if (newValue > 0) {
-                this.onWarning(newValue);
+                this.$emit('onWarning', newValue);
             }
         }
     }
