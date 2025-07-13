@@ -31,6 +31,12 @@ window.axios = Axios.create({
 });
 ```
 
+Ejecutar test unitarios
+
+```bash
+npm run test:unit
+```
+
 Nota extra:
 
 El flag `--openssl-legacy-provider` dentro del script `serve` solo es necesario desde Node.js v17 en adelante.
@@ -44,6 +50,6 @@ El flag `--openssl-legacy-provider` dentro del script `serve` solo es necesario 
 
 ```bash
 composer install
-php artisan migrate    # aplica las migraciones
-php artisan serve      # inicia Laravel en http://127.0.0.1:8000
+php artisan migrate    # aplica las migraciones de laravel
+php artisan serve     
 ```
