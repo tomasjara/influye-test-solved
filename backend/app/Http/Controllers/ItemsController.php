@@ -16,17 +16,23 @@ class ItemsController extends Controller
 
     public function createItem(Request $request)
     {
-        $data = $request->validate([
-            'title' => 'string',
-            'unit'  => 'string',
-        ]);
+        try {
+            $data = $request->all();
+            
+            if (!isset($data['title'])) {
+                return response()->json(['message' => 'Title is required'], 400);
+            }
 
-        $item = Item::create([
-            'title' => $data['title'],
-            'unit' => $data['unit'],
-            'quantity' => 0
-        ]);
-        return response()->json($item, 201);
+            $item = Item::create([
+                'title' => $data['title'],
+                'unit' => $data['unit'],
+                'quantity' => 0
+            ]);
+
+            return response()->json($item, 201);
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'Error creating item', $e], 500);
+        }
     }
 
     public function deleteItem($id)
@@ -42,7 +48,7 @@ class ItemsController extends Controller
     public function addStock(Request $request, $id_item)
     {
         try {
-            
+
             $item = Item::find($id_item);
             if (!$item) {
                 return response()->json(['message' => 'Item not found'], 404);
@@ -53,8 +59,6 @@ class ItemsController extends Controller
             }
 
             $dataTransaction = $request->all();
-            echo ("Data: " . json_encode($dataTransaction['transactions']['quantity']) . "\n");
-            echo( $id_item);
 
             $itemTransaction = ItemsTransaction::create([
                 'item_id' => $id_item,

@@ -1,7 +1,7 @@
 <template>
     <div style="padding: 15px 0 30px 0; display:flex; gap:10px; justify-content: space-between; align-items: center;">
-        <div>Total Items: {{itemsTotal}}</div>
-        <div class="red">Items con bajo stock: {{itemsWarning}}</div>
+        <div>Total Items: {{ itemsTotal }}</div>
+        <div class="red">Items con bajo stock: {{ itemsWarning }}</div>
     </div>
 </template>
 
@@ -10,11 +10,11 @@ export default {
     props: {
         items: {
             type: Array,
-            default: () => []
+            default: () => [],
         },
         onWarning: {
             type: Function,
-            default: () => {}
+            default: () => { }
         }
     },
     computed: {
@@ -22,7 +22,9 @@ export default {
             return this.items.length;
         },
         itemsWarning() {
-            return this.items.filter(item => item.quantity < 0).length;
+            if (!Array.isArray(this.items)) return
+            console.log('items: ', this.items);
+            return this.items.filter(item => Number(item.quantity) < 0).length
         }
     },
     watch: {

@@ -27,7 +27,7 @@ class Init extends Migration
 
         foreach($initial_items as $i)
         {
-            $item = new \App\Item();
+            $item = new \App\Http\Models\Item();
             $item->title = $i['item'];
             $item->quantity = $i['quantity'];
             $item->save();

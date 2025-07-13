@@ -101,7 +101,6 @@ export default {
 		},
 		getAllItems() {
 			axios.get('items').then(res => {
-				// console.log(res.data);
 				this.items = res.data;
 			}).catch(err => {
 				console.log('Error message GET all items: ', err);
@@ -122,19 +121,8 @@ export default {
 			});
 		},
 		createNewItem() {
-			if ((!this.newItem.title || this.newItem.title.trim() === '') &&
-				(!this.newItem.unit || this.newItem.unit.trim() === '')) {
-				this.newItemError = 'Los dos campos son obligatorios.';
-				return;
-			}
-
 			if (!this.newItem.title || this.newItem.title.trim() === '') {
 				this.newItemError = 'El título es obligatorio.';
-				return;
-			}
-
-			if (!this.newItem.unit || this.newItem.unit.trim() === '') {
-				this.newItemError = 'La unidad es obligatoria.';
 				return;
 			}
 
@@ -142,10 +130,9 @@ export default {
 				title: this.newItem.title,
 				unit: this.newItem.unit
 			}).then(res => {
-				// console.log(res.data);
 				this.newItemError = '';
 				this.modalCreateItem = false;
-				this.items = res.data;
+				// this.items = res.data;
 				this.newItem = { title: '', unit: '' };
 				this.getAllItems()
 			}).catch(err => {
@@ -155,7 +142,6 @@ export default {
 		},
 		deleteItem() {
 			axios.delete(`item/${this.modalOptions.id}`).then(res => {
-				// console.log(res.data);
 				this.modalOptions = null;
 				this.getAllItems();
 			}).catch(err => {
@@ -179,7 +165,6 @@ export default {
 			axios.put(`item/${this.modalOptions.id}/stock`, {
 				transactions: transactions
 			}).then(res => {
-				// console.log(res.data);
 				this.modalAddOrRemoveItemStock = false;
 				this.modalOptions = null;
 				this.addStockValue = 0;
