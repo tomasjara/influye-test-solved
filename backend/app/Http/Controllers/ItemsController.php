@@ -18,7 +18,7 @@ class ItemsController extends Controller
     {
         try {
             $data = $request->all();
-            
+
             if (!isset($data['title'])) {
                 return response()->json(['message' => 'Title is required'], 400);
             }
@@ -29,7 +29,7 @@ class ItemsController extends Controller
                 'quantity' => 0
             ]);
 
-            return response()->json($item, 201);
+            return $this->getItems();
         } catch (\Exception $e) {
             return response()->json(['message' => 'Error creating item', $e], 500);
         }
@@ -42,7 +42,7 @@ class ItemsController extends Controller
             return response()->json(['message' => 'Item not found'], 404);
         }
         $item->delete();
-        return response()->json(['message' => 'Item deleted successfully'], 200);
+        return $this->getItems();
     }
 
     public function addStock(Request $request, $id_item)
@@ -69,7 +69,7 @@ class ItemsController extends Controller
             $item->quantity += $dataTransaction['transactions']['quantity'];
             $item->save();
 
-            return response()->json(['message' => 'Stock updated successfully', 'item' => $item], 200);
+            return $this->getItems();
         } catch (\Exception $e) {
             return $e;
         }

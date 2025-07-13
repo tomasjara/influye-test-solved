@@ -93,18 +93,15 @@ export default {
 		}
 	},
 	mounted() {
-		this.getAllItems();
+		axios.get('items').then(res => {
+			this.items = res.data;
+		}).catch(err => {
+			console.log('Error message GET all items: ', err);
+		});
 	},
 	methods: {
 		Warning(itemsNumber) {
 			this.modalWarning = { count: itemsNumber };
-		},
-		getAllItems() {
-			axios.get('items').then(res => {
-				this.items = res.data;
-			}).catch(err => {
-				console.log('Error message GET all items: ', err);
-			});
 		},
 		openModalCreateItem() {
 			this.newItemError = '';
@@ -132,9 +129,8 @@ export default {
 			}).then(res => {
 				this.newItemError = '';
 				this.modalCreateItem = false;
-				// this.items = res.data;
+				this.items = res.data;
 				this.newItem = { title: '', unit: '' };
-				this.getAllItems()
 			}).catch(err => {
 				this.newItemError = '';
 				console.log('Error message create new item: ', err);
@@ -143,7 +139,7 @@ export default {
 		deleteItem() {
 			axios.delete(`item/${this.modalOptions.id}`).then(res => {
 				this.modalOptions = null;
-				this.getAllItems();
+				this.items = res.data;
 			}).catch(err => {
 				console.log('Error message delete item: ', err);
 			});
@@ -168,7 +164,7 @@ export default {
 				this.modalAddOrRemoveItemStock = false;
 				this.modalOptions = null;
 				this.addStockValue = 0;
-				this.getAllItems();
+				this.items = res.data;
 			}).catch(err => {
 				console.log('Error message add stock: ', err);
 			});
